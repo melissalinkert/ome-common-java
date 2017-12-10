@@ -288,7 +288,14 @@ public class NIOFileHandle extends AbstractNIOHandle {
   @Override
   public void seek(long pos) throws IOException {
     if (mapMode == FileChannel.MapMode.READ_WRITE && pos > length()) {
-      setLength(pos);
+      long diff = pos - length();
+      seek(length());
+      ByteBuffer bb = ByteBuffer.allocateDirect((int) Math.min(diff, 8192));
+      while (diff > 0) {
+        int len = (int) Math.min(diff, bb.capacity());
+        write(bb, 0, len);
+        diff -= bb.capacity();
+      }
     }
     buffer(pos, 0);
   }
