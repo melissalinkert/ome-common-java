@@ -314,6 +314,7 @@ public class NIOFileHandle extends AbstractNIOHandle {
   /* @see IRandomAccess.seek(long) */
   @Override
   public void seek(long pos) throws IOException {
+    LOGGER.debug("seek({}), length = {}", pos, length());
     if (mapMode == FileChannel.MapMode.READ_WRITE && pos > length()) {
       setLength(pos);
     }
@@ -610,8 +611,11 @@ public class NIOFileHandle extends AbstractNIOHandle {
    * the buffer.
    */
   private void buffer(long offset, int size) throws IOException {
+    LOGGER.debug("buffer({}, {})", offset, size);
     position = offset;
     long newPosition = offset + size;
+    LOGGER.debug("  newPosition = {}, bufferStartPosition = {}, bufferSize = {}",
+      newPosition, bufferStartPosition, bufferSize);
     if (newPosition < bufferStartPosition ||
       newPosition > bufferStartPosition + bufferSize || buffer == null)
     {
@@ -630,6 +634,7 @@ public class NIOFileHandle extends AbstractNIOHandle {
       if (byteOrder != null) setOrder(byteOrder);
     }
     buffer.position((int) (offset - bufferStartPosition));
+    LOGGER.debug("  buffer.position = {}, buffer.limit = {}", buffer.position(), buffer.limit());
     if (buffer.position() + size > buffer.limit() &&
       mapMode == FileChannel.MapMode.READ_WRITE)
     {
@@ -638,6 +643,7 @@ public class NIOFileHandle extends AbstractNIOHandle {
   }
 
   private void writeSetup(int length) throws IOException {
+    LOGGER.debug("writeSetup({})", length);
     validateLength(length);
     buffer(position, length);
   }

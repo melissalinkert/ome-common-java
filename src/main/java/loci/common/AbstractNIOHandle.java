@@ -77,7 +77,9 @@ public abstract class AbstractNIOHandle implements IRandomAccess {
    * @throws IOException If there is an error changing the handle's length.
    */
   protected boolean validateLength(int writeLength) throws IOException {
+    /* debug */ System.out.println("validateLength(" + writeLength + ")");
     if (getFilePointer() + writeLength > length()) {
+      /* debug */ System.out.println("  setting length = " + (getFilePointer() + writeLength));
       setLength(getFilePointer() + writeLength);
       return false;
     }
