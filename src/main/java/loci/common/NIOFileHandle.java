@@ -126,6 +126,7 @@ public class NIOFileHandle extends AbstractNIOHandle {
     if (mode.equals("rw")) {
       isReadWrite = true;
       mapMode = FileChannel.MapMode.READ_WRITE;
+      mode = "rwd";
     }
     raf = new RandomAccessFile(file, mode);
     channel = raf.getChannel();
