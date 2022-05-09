@@ -216,6 +216,7 @@
     <test name="Downsampling">
         <classes>
             <class name="loci.common.utests.SimpleImageScalerTest"/>
+            <class name="loci.common.utests.AverageScalerTest"/>
         </classes>
     </test>
     <!--
